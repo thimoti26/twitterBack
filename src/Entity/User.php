@@ -15,6 +15,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     private int $id;
 
+    #[ORM\OneToOne(mappedBy:"user", targetEntity:"Author")]
+    private Author $author;
+
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private string $login;
 
@@ -29,22 +32,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    public function getLogin(): ?string
+    /**
+     * @return Author
+     */
+    public function getAuthor(): Author
     {
-        return $this->login;
+        return $this->author;
     }
 
-    public function setLogin(string $login): self
+    /**
+     * @param Author $author
+     * @return User
+     */
+    public function setAuthor(Author $author): User
     {
-        $this->login = $login;
-
+        $this->author = $author;
         return $this;
     }
 
     /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
+     * @return string
+     */
+    public function getLogin(): string
+    {
+        return $this->login;
+    }
+
+    /**
+     * @param string $login
+     * @return User
+     */
+    public function setLogin(string $login): User
+    {
+        $this->login = $login;
+        return $this;
+    }
+
+    /**
+     * @return string
      */
     public function getUserIdentifier(): string
     {
@@ -52,7 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @see UserInterface
+     * @return array|string[]
      */
     public function getRoles(): array
     {
@@ -63,14 +88,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
+    /**
+     * @param array $roles
+     * @return $this
+     */
+    public function setRoles(array $roles): User
     {
         $this->roles = $roles;
 
         return $this;
     }
 
-    public function addRole(string $role): self
+    /**
+     * @param string $role
+     * @return $this
+     */
+    public function addRole(string $role): User
     {
         $this->roles[] = $role;
 
@@ -78,14 +111,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @see PasswordAuthenticatedUserInterface
+     * @return string
      */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    /**
+     * @param string $password
+     * @return $this
+     */
+    public function setPassword(string $password): User
     {
         $this->password = $password;
 
